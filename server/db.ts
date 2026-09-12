@@ -4,7 +4,10 @@ import initSqlJs, { Database } from 'sql.js';
 import { Field, WaterResource, Canal, Pump, WeatherData, CropInfo, Alert } from '../src/types.js';
 
 let dbInstance: Database | null = null;
-const DB_FILE_PATH = path.join(process.cwd(), 'irrigation_command.sqlite');
+const isVercel = process.env.VERCEL === '1';
+const DB_FILE_PATH = isVercel 
+  ? path.join('/tmp', 'irrigation_command.sqlite') 
+  : path.join(process.cwd(), 'irrigation_command.sqlite');
 
 export const DEFAULT_CROPS: CropInfo[] = [
   { id: 'tomato', name: 'Tomato', kc: 1.15, optimalMoistureMin: 60, optimalMoistureMax: 80, criticalStage: 'Flowering & Fruit Set', waterSensitivity: 'High' },
